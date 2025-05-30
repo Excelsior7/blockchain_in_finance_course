@@ -180,62 +180,36 @@ export const issueCertificate = async (
       // 7. Stocker les métadonnées sur IPFS via Pinata
       const metadataUri = await storeCertificateOnIPFS(metadata);
       
-      // 8. Interagir avec le contrat pour mint le NFT
-      if (window.ethereum) {
-        // Connexion à MetaMask
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        await window.ethereum.request({
-          method: 'wallet_switchEthereumChain',
-          params: [{ chainId: '0xaa36a7' }], // Sepolia chainId
-        });
-        await provider.send("eth_requestAccounts", []);
-        const signer = provider.getSigner();
-        
-        // Connexion au contrat
-        const contract = new ethers.Contract(
-          CONTRACT_ADDRESS,
-          CertificateNFTAbi, 
-          signer
-        );  
-        
-        // Émission du certificat   
-        const tx = await contract.issueCertificate(walletAddress, metadataUri);
-        await tx.wait();
-        
-        return tx.hash;
-      } else {
-        // Fallback: Utiliser un serveur signer avec clé privée pour les environnements sans MetaMask
-        
-        // Utiliser les variables d'environnement pour la clé RPC et la clé privée
-        const RPC_URL = process.env.REACT_APP_RPC_URL;
-        const PRIVATE_KEY = process.env.REACT_APP_PRIVATE_KEY;
-        
-        if (!PRIVATE_KEY) {
-          throw new Error("Clé privée non configurée. Veuillez configurer REACT_APP_PRIVATE_KEY dans vos variables d'environnement.");
-        }
-        
-        console.log("rpc_url",RPC_URL)
-        // Créer un provider et un wallet avec la clé privée
-        const provider = new ethers.providers.JsonRpcProvider(RPC_URL);
-        console.log("provider",provider)
-
-        const wallet = new ethers.Wallet(PRIVATE_KEY, provider);
-        console.log("wallet",wallet)
-
-        
-        // Connexion au contrat avec le wallet serveur
-        const contract = new ethers.Contract(
-          CONTRACT_ADDRESS,
-          CertificateNFTAbi, 
-          wallet
-        );
-        
-        // Émission du certificat avec le wallet serveur
-        const tx = await contract.issueCertificate(walletAddress, metadataUri);
-        await tx.wait();
-        
-        return tx.hash;
+      // Utiliser les variables d'environnement pour la clé RPC et la clé privée
+      const RPC_URL = process.env.REACT_APP_RPC_URL;
+      const PRIVATE_KEY = process.env.REACT_APP_PRIVATE_KEY;
+      
+      if (!PRIVATE_KEY) {
+        throw new Error("Clé privée non configurée. Veuillez configurer REACT_APP_PRIVATE_KEY dans vos variables d'environnement.");
       }
+      
+      console.log("rpc_url",RPC_URL)
+      // Créer un provider et un wallet avec la clé privée
+      const provider = new ethers.providers.JsonRpcProvider(RPC_URL);
+      console.log("provider",provider)
+
+      const wallet = new ethers.Wallet(PRIVATE_KEY, provider);
+      console.log("wallet",wallet)
+
+      
+      // Connexion au contrat avec le wallet serveur
+      const contract = new ethers.Contract(
+        CONTRACT_ADDRESS,
+        CertificateNFTAbi, 
+        wallet
+      );
+      
+      // Émission du certificat avec le wallet serveur
+      const tx = await contract.issueCertificate(walletAddress, metadataUri);
+      await tx.wait();
+      
+      return tx.hash;
+
     } catch (imageError) {
       // Fallback: utiliser une image générique si la génération d'image échoue
       const genericImageUri = "https://red-occasional-mule-247.mypinata.cloud/ipfs/bafkreiaj6rqcsipmhf4ene3e6uviklgava5srmrzllnkjizkmeml6hl23u";
