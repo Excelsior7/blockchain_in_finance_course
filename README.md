@@ -1,3 +1,53 @@
+# Certification Blockchain
+
+Application de certification via NFT pour les formations d'Albert School.
+
+## Configuration
+
+### Variables d'environnement
+
+Créez un fichier `.env` à la racine du projet avec les variables suivantes :
+
+```
+# Blockchain Configuration
+REACT_APP_CONTRACT_ADDRESS=0x1234567890123456789012345678901234567890
+REACT_APP_NETWORK=sepolia
+
+# Pinata Configuration (IPFS)
+REACT_APP_PINATA_API_KEY=your_pinata_api_key
+REACT_APP_PINATA_SECRET_KEY=your_pinata_secret_key
+REACT_APP_PINATA_JWT=your_pinata_jwt
+```
+
+### Blockchain
+
+1. Le `CONTRACT_ADDRESS` doit pointer vers votre smart contract ERC-721 déployé sur le réseau Sepolia.
+2. Le contrat doit implémenter la fonction `issueCertificate(address student, string memory metadataURI)`.
+
+### Pinata (IPFS)
+
+1. Créez un compte sur [Pinata](https://app.pinata.cloud/).
+2. Obtenez vos clés API et JWT depuis votre compte Pinata.
+3. Ajoutez ces clés dans votre fichier `.env`.
+
+## Installation
+
+```bash
+npm install
+```
+
+## Démarrage
+
+```bash
+npm start
+```
+
+## Fonctionnalités
+
+- **Émission de certificats** : Lorsqu'un étudiant complète un cours, un certificat est émis sous forme de NFT.
+- **Stockage IPFS** : Les certificats sont stockés sur IPFS via Pinata.
+- **Vérification** : Les certificats peuvent être vérifiés grâce à leur hash stocké sur la blockchain.
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
@@ -31,13 +81,13 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 
 ### `npm run eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+**Note: this is a one-way operation. Once you `eject`, you can't go back!**
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
 
 ## Learn More
 
